@@ -63,18 +63,55 @@ type TransactionUpdate = Partial<Transaction>;
 
 Requisitos: Node.js e npm instalados.
 
+### 1. Criar o projeto e instalar o TypeScript
+
 ```bash
 npm init -y
-npm install --save-dev typescript tsx @types/node
+npm install typescript --save-dev
 npx tsc --init
 ```
+
+- `npm init -y` cria o `package.json` com as opções padrão (o `-y` responde "sim" a todas as perguntas).
+- `npm install typescript --save-dev` instala o compilador do TypeScript como dependência de desenvolvimento, ou seja, só é usado enquanto você programa.
+- `npx tsc --init` gera o `tsconfig.json`, o arquivo de configuração do TypeScript. Atenção: o comando é `--init` junto, sem espaço.
+
+### 2. Configurar a versão do JavaScript (`target`)
+
+No `tsconfig.json`, defina o `target` como `es2020`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2020"
+  }
+}
+```
+
+O `target` indica para qual versão do JavaScript o TypeScript converte o seu código. `es2020` é moderna o bastante para o Node atual e mantém recursos como `?.` e `??`.
+
+### 3. Rodar o código com o `tsx` (reload automático)
+
+O **tsx** executa arquivos `.ts` direto, sem precisar compilar antes.
+
+```bash
+npm install -D tsx
+
+npx tsx src/index.ts
+npx tsx watch src/index.ts
+```
+
+- `npm install -D tsx` instala o tsx como dependência de desenvolvimento (`-D` é o atalho de `--save-dev`).
+- `npx tsx src/index.ts` executa o arquivo uma vez.
+- `npx tsx watch src/index.ts` fica observando o arquivo e **executa de novo toda vez que você salva** (é o "reload").
+
+### 4. Scripts do `package.json`
 
 Crie `src/index.ts` para o código inicial e adicione estes scripts em `package.json`:
 
 ```json
 {
   "scripts": {
-    "dev": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "typecheck": "tsc --noEmit"
   }
 }
